@@ -24,6 +24,13 @@
     ["🐸", "FROG WANTS YOUR OPINION", "Would you rather fight one giant frog or 100 tiny frogs with tiny briefcases?", ["GIANT FROG", "BRIEFCASE FROGS"]],
     ["🛸", "MYSTERY INVITE DETECTED", "A suspiciously shiny envelope is orbiting your mouse pointer. Click the big green button to inspect it.", ["INSPECT!!!", "NOPE"]],
   ];
+  const mediaItems = [
+    { kind: "image", src: "media/cat-cat-e.gif", alt: "A cat looking very closely at the camera.", title: "CAT CAM!!!" },
+    { kind: "image", src: "media/giphy.gif", alt: "A funny edited dog picture.", title: "DOG INTERNET!!!" },
+    { kind: "image", src: "media/hdmitofriedchicken.gif", alt: "A fried chicken shaped HDMI cable joke.", title: "TECH SUPPORT!!!" },
+    { kind: "image", src: "media/togif.gif", alt: "A small fluffy animal meme.", title: "BANKROLL REQUEST!!!" },
+    { kind: "video", src: "media/kh59zbb.mp4", alt: "A video clip from the mystery folder.", title: "MYSTERY VIDEO!!!" },
+  ];
 
   function showToast(message) {
     toast.textContent = message;
@@ -32,7 +39,11 @@
     toastTimer = setTimeout(() => toast.classList.remove("on"), 2600);
   }
 
-  function closePopup() { popupLayer.replaceChildren(); }
+  function closePopup() {
+    const video = popupLayer.querySelector("video");
+    if (video) video.pause();
+    popupLayer.replaceChildren();
+  }
 
   function showPopup(item = popups[Math.floor(Math.random() * popups.length)]) {
     closePopup();
@@ -63,11 +74,43 @@
     popupLayer.append(popup);
   }
 
+  function showMediaPopup(item = mediaItems[Math.floor(Math.random() * mediaItems.length)]) {
+    closePopup();
+    const popup = document.createElement("div");
+    popup.className = "popup popup-media-window";
+    popup.setAttribute("role", "dialog");
+    popup.setAttribute("aria-label", item.title);
+    const maxLeft = Math.max(8, window.innerWidth - 456);
+    const maxTop = Math.max(65, window.innerHeight - 390);
+    popup.style.left = `${8 + Math.random() * Math.max(0, maxLeft - 8)}px`;
+    popup.style.top = `${65 + Math.random() * Math.max(0, maxTop - 65)}px`;
+    popup.innerHTML = `<div class="popup-title"><span>INTERNET EXPLORER — MEDIA!!!</span><button type="button" aria-label="Close media popup">X</button></div><div class="popup-content popup-media-content"><h3></h3><p class="media-caption">A VERY IMPORTANT INTERNET INTERRUPTION!!!</p></div>`;
+    popup.querySelector("h3").textContent = item.title;
+    popup.querySelector(".popup-title button").addEventListener("click", closePopup);
+    const media = document.createElement(item.kind === "video" ? "video" : "img");
+    media.className = "popup-media";
+    media.src = item.src;
+    media.alt = item.alt;
+    if (item.kind === "video") {
+      media.controls = true;
+      media.autoplay = true;
+      media.muted = true;
+      media.loop = true;
+      media.playsInline = true;
+      media.setAttribute("aria-label", item.alt);
+    }
+    popup.querySelector(".popup-media-content").insertBefore(media, popup.querySelector(".media-caption"));
+    popupLayer.append(popup);
+  }
+
   function schedulePopup() {
     clearTimeout(nextPopup);
     if (paused || document.hidden) return;
     nextPopup = setTimeout(() => {
-      if (!paused && !document.hidden) showPopup();
+      if (!paused && !document.hidden) {
+        if (Math.random() < 0.35) showMediaPopup();
+        else showPopup();
+      }
       schedulePopup();
     }, 5200 + Math.random() * 3800);
   }
