@@ -6,6 +6,7 @@
   const popupStatus = document.querySelector("#popup-status");
   let paused = false;
   let nextPopup;
+  let popupAnimationFrame;
   let toastTimer;
   let cursorStarted = false;
   let lastTrailTime = 0;
@@ -42,7 +43,37 @@
   function closePopup() {
     const video = popupLayer.querySelector("video");
     if (video) video.pause();
+    if (popupAnimationFrame) cancelAnimationFrame(popupAnimationFrame);
+    popupAnimationFrame = 0;
     popupLayer.replaceChildren();
+  }
+
+
+  function bouncePopup(popup) {
+    let x = parseFloat(popup.style.left) || 8;
+    let y = parseFloat(popup.style.top) || 65;
+    let velocityX = (Math.random() < 0.5 ? -1 : 1) * (1.4 + Math.random() * 1.2);
+    let velocityY = (Math.random() < 0.5 ? -1 : 1) * (1.4 + Math.random() * 1.2);
+    let previousTime = 0;
+
+    function move(timestamp) {
+      if (!popup.isConnected) return;
+      const elapsed = previousTime ? Math.min(timestamp - previousTime, 40) : 16;
+      previousTime = timestamp;
+      const maxX = Math.max(8, window.innerWidth - popup.offsetWidth - 8);
+      const maxY = Math.max(65, window.innerHeight - popup.offsetHeight - 8);
+      x += velocityX * elapsed;
+      y += velocityY * elapsed;
+      if (x <= 8) { x = 8; velocityX = Math.abs(velocityX); }
+      else if (x >= maxX) { x = maxX; velocityX = -Math.abs(velocityX); }
+      if (y <= 65) { y = 65; velocityY = Math.abs(velocityY); }
+      else if (y >= maxY) { y = maxY; velocityY = -Math.abs(velocityY); }
+      popup.style.left = `${x}px`;
+      popup.style.top = `${y}px`;
+      popupAnimationFrame = requestAnimationFrame(move);
+    }
+
+    popupAnimationFrame = requestAnimationFrame(move);
   }
 
   function showPopup(item = popups[Math.floor(Math.random() * popups.length)]) {
@@ -72,6 +103,7 @@
       actions.append(button);
     });
     popupLayer.append(popup);
+    bouncePopup(popup);
   }
 
   function showMediaPopup(item = mediaItems[Math.floor(Math.random() * mediaItems.length)]) {
@@ -101,6 +133,7 @@
     }
     popup.querySelector(".popup-media-content").insertBefore(media, popup.querySelector(".media-caption"));
     popupLayer.append(popup);
+    bouncePopup(popup);
   }
 
   function schedulePopup() {
