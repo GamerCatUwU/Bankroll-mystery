@@ -112,7 +112,7 @@
         else showPopup();
       }
       schedulePopup();
-    }, 5200 + Math.random() * 3800);
+    }, 2600 + Math.random() * 1800);
   }
 
   async function copyCode() {
