@@ -16,10 +16,10 @@
 
   const popups = [
     ["🚨", "YOU HAVE BEEN SELECTED!!!", "The computer has selected you for a prize of one (1) extremely excited hamster.", ["WOW!!!", "NOT NOW"]],
-    ["🤑", "BANKROLL ALERT!!!", "A tiny pile of imaginary dollars has entered the chat. It brought a coupon for invisible soup.", ["GIMME!!!", "ASK LATER"]],
+    ["🤑", "BANKROLL ALERT!!!", "The bankroll train has arrived and is asking you to sign the guestbook before it unloads.", ["GIMME!!!", "ASK LATER"]],
     ["🦆", "DUCK SAYS CLICK OK", "The duck is wearing sunglasses indoors. It says the invite code is probably under the couch.", ["OK DUCK", "QUACK"]],
-    ["🎰", "JACKPOT-ISH!!!", "You won 47 pretend points and a high-five from Steve. Steve is currently looking for his shoe.", ["CLAIM IT!!!", "STEVE? WHO?"]],
-    ["💸", "FREE MONEY!!! (SORT OF)", "This demo has no real money attached. But the dollar sign is wearing a tiny hat!!!", ["TINY HAT!!!", "CLOSE"]],
+    ["🎰", "JACKPOT ALERT!!!", "The wheel landed on Steve's lucky number. Steve is very excited and has found one of his shoes.", ["CLAIM IT!!!", "STEVE? WHO?"]],
+    ["💸", "FREE MONEY ALERT!!!", "The dollar sign is wearing a tiny hat and has requested its own guestbook page!!!", ["TINY HAT!!!", "CLOSE"]],
     ["📢", "IMPORTANT INTERNET NEWS", "A website has put a blinking message inside another blinking message. The year is 2008 again.", ["INCREDIBLE", "MAKE IT STOP"]],
     ["🐸", "FROG WANTS YOUR OPINION", "Would you rather fight one giant frog or 100 tiny frogs with tiny briefcases?", ["GIANT FROG", "BRIEFCASE FROGS"]],
     ["🛸", "MYSTERY INVITE DETECTED", "A suspiciously shiny envelope is orbiting your mouse pointer. Click the big green button to inspect it.", ["INSPECT!!!", "NOPE"]],
@@ -87,18 +87,17 @@
       helper.select();
       document.execCommand("copy");
       helper.remove();
-      showToast(`CODE COPIED!!! ${code} (demo)!!!`);
+      showToast(`CODE COPIED!!! ${code}!!!`);
     }
   }
 
   document.querySelector("#copy-code").addEventListener("click", copyCode);
   document.querySelector("#claim-button").addEventListener("click", copyCode);
-  document.querySelector("#header-join").addEventListener("click", () => showPopup(["💸", "YOUR INVITE IS READY!!!", "Use the example code BANKROLL2008. Connect your actual invite link before you send this page to people.", ["COPY THE CODE", "I WILL!!!"]]));
-  document.querySelector("#steve-button").addEventListener("click", () => showPopup(["🧔", "STEVE SAYS...", "“It looks very official.” Steve has never seen the internet before.", ["THANKS STEVE", "SUSPICIOUS"]]));
+  document.querySelector("#header-join").addEventListener("click", () => showPopup(["💸", "YOUR INVITE IS ALMOST HERE!!!", "The invite code is on its way. Steve is watching the mailbox very carefully.", ["COPY THE CODE", "I WILL!!!"]]));
+  document.querySelector("#steve-button").addEventListener("click", () => showPopup(["🧔", "STEVE SAYS...", "The invite code is nearly here. He is guarding the modem until it arrives.", ["THANKS STEVE", "ASK AGAIN"]]));
   document.querySelector("#sign-button").addEventListener("click", () => showPopup(["📖", "GUESTBOOK SIGNED!!!", "Your name has been written in invisible ink. You are now internet famous in this browser tab.", ["I'M FAMOUS", "SHOW MY MUM"]]));
   document.querySelector("#spin-button").addEventListener("click", () => {
-    const pretend = Math.floor(Math.random() * 1000) + 1;
-    showPopup(["🎰", `YOU WON ${pretend} PRETEND POINTS!!!`, "These points are made of pixels and cannot be exchanged for money, snacks, or a new hat.", ["WOOHOO!!!", "SPIN AGAIN"]]);
+    showPopup(["🎰", "THE WHEEL HAS SPOKEN!!!", "It landed on Steve's lucky number. Steve is very excited and has found one of his shoes.", ["WOOHOO!!!", "SPIN AGAIN"]]);
   });
   pauseButton.addEventListener("click", () => {
     paused = !paused;
